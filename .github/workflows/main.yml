@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build, Push and Run Docker Image
 
 on:
   push:
@@ -29,3 +29,14 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.GIT_USERNAME }}/myapp:latest
+
+      - name: Pull Docker Image
+        run: docker pull ${{ secrets.GIT_USERNAME }}/myapp:latest
+
+      - name: Run Docker Container
+        run: |
+          docker run -d \
+            --name myapp-container \
+            -p 8080:8080 \
+            ${{ secrets.GIT_USERNAME }}/myapp:latest
+
